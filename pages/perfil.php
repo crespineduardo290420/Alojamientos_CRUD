@@ -1,3 +1,29 @@
+<?php
+session_start();
+include '../db/database.php'; // Archivo para la conexión con la base de datos
+
+// Verificar si el usuario está autenticado
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../login.php");
+    exit();
+}
+
+// Obtener información del administrador desde la base de datos
+$user_id = $_SESSION['user_id'];
+$sql = "SELECT nombre, apellido, correo, direccion, ciudad, pais, codigo_postal, acerca_de, imagen FROM usuarios WHERE id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+  $user_data = $result->fetch_assoc();
+} else {
+  echo "Error: No se encontró información del usuario.";
+  exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,7 +33,7 @@
   <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="../assets/img/favicon.png">
   <title>
-    Argon Dashboard 3 by Creative Tim
+    Hotel Kodigo
   </title>
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -28,7 +54,7 @@
   <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 " id="sidenav-main">
     <div class="sidenav-header">
       <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
-      <a class="navbar-brand m-0" href=" https://demos.creative-tim.com/argon-dashboard/pages/dashboard.html " target="_blank">
+      <a class="navbar-brand m-0" target="_blank">
         <!-- agregar logo -->
         <!-- <img src="" width="26px" height="26px" class="navbar-brand-img h-100" alt="main_logo"> -->
         <span class="ms-1 font-weight-bold">Hotel Kodigo</span>
@@ -38,7 +64,7 @@
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="../pages/dashboard.html">
+          <a class="nav-link" href="../pages/dashboard.php">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-tv-2 text-dark text-sm opacity-10"></i>
             </div>
@@ -46,7 +72,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="../pages/clientes.html">
+          <a class="nav-link" href="../pages/clientes.php">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
             </div>
@@ -54,15 +80,15 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="../pages/reservaciones.html">
+          <a class="nav-link " href="../pages/alojamiento.php">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-calendar-grid-58 text-dark text-sm opacity-10"></i>
             </div>
-            <span class="nav-link-text ms-1">Reservaciones</span>
+            <span class="nav-link-text ms-1">Alojamiento</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="../pages/facturacion.html">
+          <a class="nav-link " href="../pages/facturacion.php">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-credit-card text-dark text-sm opacity-10"></i>
             </div>
@@ -73,7 +99,7 @@
           <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Cuenta</h6>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="../pages/perfil.html">
+          <a class="nav-link active" href="../pages/perfil.php">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-badge text-dark text-sm opacity-10"></i>
             </div>
@@ -81,7 +107,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="../pages/cerrar-sesion.html">
+          <a class="nav-link " href="../pages/cerrar-sesion.php">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-button-power text-dark text-sm opacity-10"></i>
             </div>
@@ -145,13 +171,6 @@
                         <img src="../assets/img/team-2.jpg" class="avatar avatar-sm me-3">
                       </div>
                       <div class="d-flex flex-column justify-content-center">
-                        <h6 class="text-sm font-weight-normal mb-1">
-                          <span class="font-weight-bold">New message</span> from Laur
-                        </h6>
-                        <p class="text-xs text-secondary mb-0">
-                          <i class="fa fa-clock me-1"></i>
-                          13 minutes ago
-                        </p>
                       </div>
                     </div>
                   </a>
@@ -191,15 +210,6 @@
                             </g>
                           </g>
                         </svg>
-                      </div>
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="text-sm font-weight-normal mb-1">
-                          Payment successfully completed
-                        </h6>
-                        <p class="text-xs text-secondary mb-0">
-                          <i class="fa fa-clock me-1"></i>
-                          2 days
-                        </p>
                       </div>
                     </div>
                   </a>
@@ -241,13 +251,13 @@
                 <li class="nav-item">
                   <a class="nav-link mb-0 px-0 py-1 d-flex align-items-center justify-content-center " data-bs-toggle="tab" href="javascript:;" role="tab" aria-selected="false">
                     <i class="ni ni-email-83"></i>
-                    <span class="ms-2">Messages</span>
+                    <span class="ms-2">Mensajes</span>
                   </a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link mb-0 px-0 py-1 d-flex align-items-center justify-content-center " data-bs-toggle="tab" href="javascript:;" role="tab" aria-selected="false">
                     <i class="ni ni-settings-gear-65"></i>
-                    <span class="ms-2">Settings</span>
+                    <span class="ms-2">Configuración</span>
                   </a>
                 </li>
               </ul>
@@ -262,130 +272,74 @@
           <div class="card">
             <div class="card-header pb-0">
               <div class="d-flex align-items-center">
-                <p class="mb-0">Edit Profile</p>
-                <button class="btn btn-primary btn-sm ms-auto">Settings</button>
+                <p class="mb-0">Editar Perfil</p>
+                <button class="btn btn-primary btn-sm ms-auto">Configuración</button>
               </div>
             </div>
             <div class="card-body">
-              <p class="text-uppercase text-sm">User Information</p>
+              <p class="text-uppercase text-sm">Información del usuario</p>
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Username</label>
+                    <label for="example-text-input" class="form-control-label">Nombre de usuario</label>
                     <input class="form-control" type="text" value="lucky.jesse">
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Email address</label>
+                    <label for="example-text-input" class="form-control-label">Correo electrónico</label>
                     <input class="form-control" type="email" value="jesse@example.com">
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">First name</label>
+                    <label for="example-text-input" class="form-control-label">Nombre</label>
                     <input class="form-control" type="text" value="Jesse">
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Last name</label>
+                    <label for="example-text-input" class="form-control-label">Apellido</label>
                     <input class="form-control" type="text" value="Lucky">
                   </div>
                 </div>
               </div>
               <hr class="horizontal dark">
-              <p class="text-uppercase text-sm">Contact Information</p>
+              <p class="text-uppercase text-sm">Información de dirección</p>
               <div class="row">
                 <div class="col-md-12">
                   <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Address</label>
+                    <label for="example-text-input" class="form-control-label">Dirección</label>
                     <input class="form-control" type="text" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09">
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">City</label>
-                    <input class="form-control" type="text" value="New York">
+                    <label for="example-text-input" class="form-control-label">Ciudad</label>
+                    <input class="form-control" type="text" value="Ciudad de Panamá">
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Country</label>
-                    <input class="form-control" type="text" value="United States">
+                    <label for="example-text-input" class="form-control-label">País</label>
+                    <input class="form-control" type="text" value="Panamá">
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Postal code</label>
+                    <label for="example-text-input" class="form-control-label">Código postal</label>
                     <input class="form-control" type="text" value="437300">
                   </div>
                 </div>
               </div>
               <hr class="horizontal dark">
-              <p class="text-uppercase text-sm">About me</p>
+              <p class="text-uppercase text-sm">Acerca de mí</p>
               <div class="row">
                 <div class="col-md-12">
                   <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">About me</label>
-                    <input class="form-control" type="text" value="A beautiful Dashboard for Bootstrap 5. It is Free and Open Source.">
+                    <label for="example-text-input" class="form-control-label">Acerca de mí</label>
+                    <input class="form-control" type="text" value="Escribir aquí...">
                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card card-profile">
-            <img src="../assets/img/bg-profile.jpg" alt="Image placeholder" class="card-img-top">
-            <div class="row justify-content-center">
-              <div class="col-4 col-lg-4 order-lg-2">
-                <div class="mt-n4 mt-lg-n6 mb-4 mb-lg-0">
-                  <a href="javascript:;">
-                    <img src="../assets/img/team-2.jpg" class="rounded-circle img-fluid border border-2 border-white">
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="card-header text-center border-0 pt-0 pt-lg-2 pb-4 pb-lg-3">
-              <div class="d-flex justify-content-between">
-                <a href="javascript:;" class="btn btn-sm btn-info mb-0 d-none d-lg-block">Connect</a>
-                <a href="javascript:;" class="btn btn-sm btn-info mb-0 d-block d-lg-none"><i class="ni ni-collection"></i></a>
-                <a href="javascript:;" class="btn btn-sm btn-dark float-right mb-0 d-none d-lg-block">Message</a>
-                <a href="javascript:;" class="btn btn-sm btn-dark float-right mb-0 d-block d-lg-none"><i class="ni ni-email-83"></i></a>
-              </div>
-            </div>
-            <div class="card-body pt-0">
-              <div class="row">
-                <div class="col">
-                  <div class="d-flex justify-content-center">
-                    <div class="d-grid text-center">
-                      <span class="text-lg font-weight-bolder">22</span>
-                      <span class="text-sm opacity-8">Friends</span>
-                    </div>
-                    <div class="d-grid text-center mx-4">
-                      <span class="text-lg font-weight-bolder">10</span>
-                      <span class="text-sm opacity-8">Photos</span>
-                    </div>
-                    <div class="d-grid text-center">
-                      <span class="text-lg font-weight-bolder">89</span>
-                      <span class="text-sm opacity-8">Comments</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="text-center mt-4">
-                <h5>
-                  Mark Davis<span class="font-weight-light">, 35</span>
-                </h5>
-                <div class="h6 font-weight-300">
-                  <i class="ni location_pin mr-2"></i>Bucharest, Romania
-                </div>
-                <div class="h6 mt-4">
-                  <i class="ni business_briefcase-24 mr-2"></i>Solution Manager - Creative Tim Officer
-                </div>
-                <div>
-                  <i class="ni education_hat mr-2"></i>University of Computer Science
                 </div>
               </div>
             </div>
