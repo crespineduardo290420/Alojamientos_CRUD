@@ -16,20 +16,59 @@ if ($_SESSION['role'] !== 'admin') {
 
 // Manejar la solicitud de agregar un alojamiento
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nombre_alojamiento = $_POST['nombre'];
-    $direccion = $_POST['direccion'];
-    $descripcion = $_POST['descripcion'];
+    $nombreLugar = $_POST['nombreLugar'];
+    $ubicacionLugar = $_POST['ubicacionLugar'];
+    $horariosDisponibles = $_POST['horariosDisponibles'];
+    $huespedes = $_POST['huespedes'];
+    $precioPorDia = $_POST['precioPorDia'];
+    $imagen = $_FILES['imagen'];
 
     // Validar que los datos no estén vacíos
-    if (!empty($nombre_alojamiento) && !empty($direccion) && !empty($descripcion)) {
-        $sql = "INSERT INTO alojamientos (nombre, direccion, descripcion) VALUES (?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sss", $nombre_alojamiento, $direccion, $descripcion);
+    if (!empty($nombreLugar) && !empty($ubicacionLugar) && !empty($horariosDisponibles) && !empty($huespedes) && !empty($precioPorDia) && !empty($imagen['name'])) {
+        // Manejar la subida de la imagen
+        $target_dir = "../uploads/";
+        $target_file = $target_dir . basename($imagen["name"]);
+        $uploadOk = 1;
+        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-        if ($stmt->execute()) {
-            echo "Alojamiento agregado exitosamente.";
+        // Verificar si el archivo es una imagen real
+        $check = getimagesize($imagen["tmp_name"]);
+        if ($check !== false) {
+            $uploadOk = 1;
         } else {
-            echo "Error al agregar alojamiento: " . $stmt->error;
+            echo "El archivo no es una imagen.";
+            $uploadOk = 0;
+        }
+
+        // Verificar tamaños y extensiones permitidas
+        if ($imagen["size"] > 500000) { // Tamaño máximo de 500KB
+            echo "El archivo es demasiado grande.";
+            $uploadOk = 0;
+        }
+        if (!in_array($imageFileType, ["jpg", "png", "jpeg", "gif"])) {
+            echo "Solo se permiten archivos JPG, JPEG, PNG y GIF.";
+            $uploadOk = 0;
+        }
+
+        // Subir imagen si todo está bien
+        if ($uploadOk == 1) {
+            if (move_uploaded_file($imagen["tmp_name"], $target_file)) {
+                // Insertar datos en la base de datos
+                $sql = "INSERT INTO alojamientos (nombre, direccion, horarios, huespedes, precio, imagen) VALUES (?, ?, ?, ?, ?, ?)";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("sssiis", $nombreLugar, $ubicacionLugar, $horariosDisponibles, $huespedes, $precioPorDia, $target_file);
+
+                if ($stmt->execute()) {
+                    echo "Alojamiento agregado exitosamente.";
+                    // Redirigir después de agregar
+                    header("Location: alojamientos.php");
+                    exit();
+                } else {
+                    echo "Error al agregar alojamiento: " . $stmt->error;
+                }
+            } else {
+                echo "Error al subir la imagen.";
+            }
         }
     } else {
         echo "Por favor, complete todos los campos.";
@@ -67,8 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="sidenav-header">
       <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
         aria-hidden="true" id="iconSidenav"></i>
-      <a class="navbar-brand m-0"
-        target="_blank">
+      <a class="navbar-brand m-0" target="_blank">
         <!-- agregar logo -->
         <!-- <img src="" width="26px" height="26px" class="navbar-brand-img h-100" alt="main_logo"> -->
         <span class="ms-1 font-weight-bold">Hotel Kodigo</span>
@@ -185,65 +223,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- End Navbar -->
     <div class="container-fluid py-4">
       <div class="row">
-        <div class="col-md-12 mt-4"> <!-- Cambiado col-md-7 a col-md-12 -->
+        <div class="col-md-12 mt-4"> <!-- Contenedor principal -->
           <div class="card">
             <div class="card-header pb-0 px-3">
-              <h6 class="mb-0">Información de alojamiento</h6>
+              <h6 class="mb-0">Agregar Alojamiento</h6>
             </div>
             <div class="card-body pt-4 p-3">
-              <ul class="list-group">
-                <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
-                  <div class="d-flex flex-column">
-                    <h6 class="mb-3 text-sm">Oliver Liam</h6>
-                    <span class="mb-2 text-xs">Company Name: <span class="text-dark font-weight-bold ms-sm-2">Viking
-                        Burrito</span></span>
-                    <span class="mb-2 text-xs">Email Address: <span
-                        class="text-dark ms-sm-2 font-weight-bold">oliver@burrito.com</span></span>
-                    <span class="text-xs">VAT Number: <span
-                        class="text-dark ms-sm-2 font-weight-bold">FRB1235476</span></span>
-                  </div>
-                  <div class="ms-auto text-end">
-                    <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;"><i
-                        class="far fa-trash-alt me-2"></i>Delete</a>
-                    <a class="btn btn-link text-dark px-3 mb-0" href="javascript:;"><i
-                        class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Edit</a>
-                  </div>
-                </li>
-                <li class="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
-                  <div class="d-flex flex-column">
-                    <h6 class="mb-3 text-sm">Lucas Harper</h6>
-                    <span class="mb-2 text-xs">Company Name: <span class="text-dark font-weight-bold ms-sm-2">Stone Tech
-                        Zone</span></span>
-                    <span class="mb-2 text-xs">Email Address: <span
-                        class="text-dark ms-sm-2 font-weight-bold">lucas@stone-tech.com</span></span>
-                    <span class="text-xs">VAT Number: <span
-                        class="text-dark ms-sm-2 font-weight-bold">FRB1235476</span></span>
-                  </div>
-                  <div class="ms-auto text-end">
-                    <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;"><i
-                        class="far fa-trash-alt me-2"></i>Delete</a>
-                    <a class="btn btn-link text-dark px-3 mb-0" href="javascript:;"><i
-                        class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Edit</a>
-                  </div>
-                </li>
-                <li class="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
-                  <div class="d-flex flex-column">
-                    <h6 class="mb-3 text-sm">Ethan James</h6>
-                    <span class="mb-2 text-xs">Company Name: <span class="text-dark font-weight-bold ms-sm-2">Fiber
-                        Notion</span></span>
-                    <span class="mb-2 text-xs">Email Address: <span
-                        class="text-dark ms-sm-2 font-weight-bold">ethan@fiber.com</span></span>
-                    <span class="text-xs">VAT Number: <span
-                        class="text-dark ms-sm-2 font-weight-bold">FRB1235476</span></span>
-                  </div>
-                  <div class="ms-auto text-end">
-                    <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;"><i
-                        class="far fa-trash-alt me-2"></i>Delete</a>
-                    <a class="btn btn-link text-dark px-3 mb-0" href="javascript:;"><i
-                        class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Edit</a>
-                  </div>
-                </li>
-              </ul>
+              <form action="/add_accommodation" method="POST" enctype="multipart/form-data"> <!-- Formulario -->
+                <div class="mb-3">
+                  <label for="nombreLugar" class="form-label">Nombre del Lugar</label>
+                  <input type="text" class="form-control" id="nombreLugar" name="nombreLugar"
+                    placeholder="Ingrese el nombre del lugar" required>
+                </div>
+                <div class="mb-3">
+                  <label for="ubicacionLugar" class="form-label">Ubicación del Lugar</label>
+                  <input type="text" class="form-control" id="ubicacionLugar" name="ubicacionLugar"
+                    placeholder="Ingrese la ubicación" required>
+                </div>
+                <div class="mb-3">
+                  <label for="horariosDisponibles" class="form-label">Horarios Disponibles</label>
+                  <input type="text" class="form-control" id="horariosDisponibles" name="horariosDisponibles"
+                    placeholder="Ejemplo: 9 AM - 5 PM" required>
+                </div>
+                <div class="mb-3">
+                  <label for="huespedes" class="form-label">Huéspedes</label>
+                  <input type="number" class="form-control" id="huespedes" name="huespedes"
+                    placeholder="Número máximo de huéspedes" required>
+                </div>
+                <div class="mb-3">
+                  <label for="precioPorDia" class="form-label">Precio por día</label>
+                  <input type="number" step="0.01" class="form-control" id="precioPorDia" name="precioPorDia"
+                    placeholder="Ingrese el precio por día" required>
+                </div>
+                <div class="mb-3">
+                  <label for="imagen" class="form-label">Imagen</label>
+                  <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*" required>
+                </div>
+                <button type="submit" class="btn btn-success">Guardar Alojamiento</button>
+              </form>
             </div>
           </div>
         </div>
