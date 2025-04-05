@@ -23,7 +23,7 @@
         <?php if (isset($_SESSION['user_id'])): ?>
           <!-- Si el usuario está logueado, solo mostramos "Mis Alojamientos" -->
           <li class="nav-item">
-            <a class="nav-link" href="mis_alojamientos.php">Mis Alojamientos</a>
+            <a class="nav-link" href="../pages/dashboard.php">Mis Alojamientos</a>
           </li>
         <?php else: ?>
           <!-- Si NO está logueado, mostramos el menú normal -->
