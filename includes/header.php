@@ -1,4 +1,6 @@
 <?php session_start(); ?>
+// Cargar configuración (cambiar segun la localizacion)
+require __DIR__.'/../config/config.php'; 
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -23,7 +25,7 @@
         <?php if (isset($_SESSION['user_id'])): ?>
           <!-- Si el usuario está logueado, solo mostramos "Mis Alojamientos" -->
           <li class="nav-item">
-            <a class="nav-link" href="mis_alojamientos.php">Mis Alojamientos</a>
+            <a class="nav-link" href="/Kodigo/Alojamientos_CRUD/pages/dashboard.php">Mis Alojamientos</a>
           </li>
         <?php else: ?>
           <!-- Si NO está logueado, mostramos el menú normal -->

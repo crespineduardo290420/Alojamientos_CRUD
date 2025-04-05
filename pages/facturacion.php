@@ -1,4 +1,7 @@
 <?php
+// Cargar configuración (cambiar segun la localizacion)
+require __DIR__.'/../config/config.php'; 
+
 session_start();
 include '../db/database.php'; // Archivo para la conexión con la base de datos
 
@@ -90,7 +93,7 @@ if (!isset($_SESSION['user_id'])) {
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="../pages/cerrar-sesion.php">
+          <a class="nav-link " href="/Kodigo/Alojamientos_CRUD/login.php">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-button-power text-dark text-sm opacity-10"></i>
             </div>
