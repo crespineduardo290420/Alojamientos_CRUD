@@ -23,7 +23,14 @@ $result = $conn->query($sql);
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="icon" type="image/png" href="../assets/img/favicon.png">
   <title>Hotel Kodigo</title>
+  <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+  <!-- Nucleo Icons -->
+  <link href="https://demos.creative-tim.com/argon-dashboard-pro/assets/css/nucleo-icons.css" rel="stylesheet" />
+  <link href="https://demos.creative-tim.com/argon-dashboard-pro/assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <!-- CSS Files -->
   <link id="pagestyle" href="../assets/css/argon-dashboard.css?v=2.1.0" rel="stylesheet" />
 </head>
 
@@ -153,8 +160,15 @@ $result = $conn->query($sql);
                     <?php while ($row = $result->fetch_assoc()): ?>
                       <tr>
                         <td>
+
                           <div class="d-flex px-2 py-1">
-                            <img src="../uploads/<?= htmlspecialchars($row['imagen'] ?? 'default-avatar.png') ?>" class="avatar avatar-sm me-3" alt="avatar">
+                            <?php
+                            // Verificar si el valor de 'imagen' ya contiene 'uploads/'
+                            $ruta = strpos($row['imagen'], 'uploads/') === false
+                              ? "../uploads/" . ($row['imagen'] ?? 'default-avatar.png')
+                              : "../" . ($row['imagen'] ?? 'default-avatar.png');
+                            ?>
+                            <img src="<?= htmlspecialchars($ruta) ?>" class="avatar avatar-sm me-3" alt="avatar">
                             <div>
                               <h6 class="mb-0 text-sm"><?= htmlspecialchars($row['nombre']) . ' ' . htmlspecialchars($row['apellido']) ?></h6>
                               <p class="text-xs text-secondary mb-0"><?= htmlspecialchars($row['correo']) ?></p>

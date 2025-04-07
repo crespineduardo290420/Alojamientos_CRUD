@@ -50,13 +50,17 @@ if ($result->num_rows > 0) {
 </head>
 
 <body class="g-sidenav-show bg-gray-100">
-  <div class="position-absolute w-100 min-height-300 top-0" style="background-image: url('https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/profile-layout-header.jpg'); background-position-y: 50%;">
+  <div class="position-absolute w-100 min-height-300 top-0"
+    style="background-image: url('https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/profile-layout-header.jpg'); background-position-y: 50%;">
     <span class="mask bg-primary opacity-6"></span>
   </div>
 
-  <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 " id="sidenav-main">
+  <aside
+    class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 "
+    id="sidenav-main">
     <div class="sidenav-header">
-      <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
+      <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
+        aria-hidden="true" id="iconSidenav"></i>
       <a class="navbar-brand m-0" target="_blank">
         <!-- agregar logo -->
         <!-- <img src="" width="26px" height="26px" class="navbar-brand-img h-100" alt="main_logo"> -->
@@ -68,7 +72,8 @@ if ($result->num_rows > 0) {
       <ul class="navbar-nav">
         <li class="nav-item">
           <a class="nav-link" href="../pages/dashboard.php">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+            <div
+              class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-tv-2 text-dark text-sm opacity-10"></i>
             </div>
             <span class="nav-link-text ms-1">Dashboard</span>
@@ -76,7 +81,8 @@ if ($result->num_rows > 0) {
         </li>
         <li class="nav-item">
           <a class="nav-link" href="../pages/clientes.php">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+            <div
+              class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
             </div>
             <span class="nav-link-text ms-1">Clientes</span>
@@ -84,7 +90,8 @@ if ($result->num_rows > 0) {
         </li>
         <li class="nav-item">
           <a class="nav-link " href="../pages/alojamiento.php">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+            <div
+              class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-calendar-grid-58 text-dark text-sm opacity-10"></i>
             </div>
             <span class="nav-link-text ms-1">Alojamiento</span>
@@ -92,7 +99,8 @@ if ($result->num_rows > 0) {
         </li>
         <li class="nav-item">
           <a class="nav-link " href="../pages/facturacion.php">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+            <div
+              class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-credit-card text-dark text-sm opacity-10"></i>
             </div>
             <span class="nav-link-text ms-1">Facturación</span>
@@ -103,7 +111,8 @@ if ($result->num_rows > 0) {
         </li>
         <li class="nav-item">
           <a class="nav-link active" href="../pages/perfil.php">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+            <div
+              class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-badge text-dark text-sm opacity-10"></i>
             </div>
             <span class="nav-link-text ms-1">Perfil</span>
@@ -111,7 +120,8 @@ if ($result->num_rows > 0) {
         </li>
         <li class="nav-item">
           <a class="nav-link" href="../pages/logout.php">
-            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+            <div
+              class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-button-power text-dark text-sm opacity-10"></i>
             </div>
             <span class="nav-link-text ms-1">Cerrar Sesión</span>
@@ -123,11 +133,13 @@ if ($result->num_rows > 0) {
 
   <div class="main-content position-relative max-height-vh-100 h-100">
     <!-- Navbar -->
-    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl " id="navbarBlur" data-scroll="false">
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl " id="navbarBlur"
+      data-scroll="false">
       <div class="container-fluid py-1 px-3">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-white" href="javascript:;">Dashboard</a></li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-white"
+                href="javascript:;">Dashboard</a></li>
             <li class="breadcrumb-item text-sm text-white active" aria-current="page">Perfil</li>
           </ol>
           <h6 class="font-weight-bolder text-white mb-0">Perfil</h6>
@@ -135,7 +147,8 @@ if ($result->num_rows > 0) {
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
             <div class="input-group">
-              <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
+              <span class="input-group-text text-body"><i class="fas fa-search"
+                  aria-hidden="true"></i></span>
               <input type="text" class="form-control" placeholder="Type here...">
             </div>
           </div>
@@ -164,7 +177,13 @@ if ($result->num_rows > 0) {
         <div class="row gx-4">
           <div class="col-auto">
             <div class="avatar avatar-xl position-relative">
-              <img src="<?= htmlspecialchars($user_data['imagen']) ?>" alt="profile_image" class="w-100 border-radius-lg shadow-sm">
+              <?php
+              // Verificar si la ruta de la imagen ya contiene 'uploads/'
+              $ruta_imagen = strpos($user_data['imagen'], 'uploads/') === false
+                ? "../uploads/" . ($user_data['imagen'] ?? 'default-avatar.png')
+                : "../" . ($user_data['imagen'] ?? 'default-avatar.png');
+              ?>
+              <img src="<?= htmlspecialchars($ruta_imagen) ?>" alt="profile_image" class="w-100 border-radius-lg shadow-sm">
             </div>
           </div>
           <div class="col-auto my-auto">
@@ -181,19 +200,22 @@ if ($result->num_rows > 0) {
             <div class="nav-wrapper position-relative end-0">
               <ul class="nav nav-pills nav-fill p-1" role="tablist">
                 <li class="nav-item">
-                  <a class="nav-link mb-0 px-0 py-1 active d-flex align-items-center justify-content-center " data-bs-toggle="tab" href="javascript:;" role="tab" aria-selected="true">
+                  <a class="nav-link mb-0 px-0 py-1 active d-flex align-items-center justify-content-center "
+                    data-bs-toggle="tab" href="javascript:;" role="tab" aria-selected="true">
                     <i class="ni ni-app"></i>
                     <span class="ms-2">App</span>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link mb-0 px-0 py-1 d-flex align-items-center justify-content-center " data-bs-toggle="tab" href="javascript:;" role="tab" aria-selected="false">
+                  <a class="nav-link mb-0 px-0 py-1 d-flex align-items-center justify-content-center "
+                    data-bs-toggle="tab" href="javascript:;" role="tab" aria-selected="false">
                     <i class="ni ni-email-83"></i>
                     <span class="ms-2">Mensajes</span>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link mb-0 px-0 py-1 d-flex align-items-center justify-content-center " data-bs-toggle="tab" href="javascript:;" role="tab" aria-selected="false">
+                  <a class="nav-link mb-0 px-0 py-1 d-flex align-items-center justify-content-center "
+                    data-bs-toggle="tab" href="javascript:;" role="tab" aria-selected="false">
                     <i class="ni ni-settings-gear-65"></i>
                     <span class="ms-2">Configuración</span>
                   </a>
@@ -206,7 +228,8 @@ if ($result->num_rows > 0) {
     </div>
     <div class="container py-4">
       <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-10"> <!-- Ajusta las proporciones -->
+        <div class="col-lg-8 col-md-10">
+          <!-- Ajusta las proporciones -->
           <div class="card">
             <div class="card-header pb-0">
               <div class="d-flex align-items-center">
@@ -219,20 +242,24 @@ if ($result->num_rows > 0) {
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="example-text-input" class="form-control-label">Correo electrónico</label>
-                    <input class="form-control" type="email" value="<?= htmlspecialchars($user_data['email']) ?>">
+                    <label for="example-text-input" class="form-control-label">Correo
+                      electrónico</label>
+                    <input class="form-control" type="email"
+                      value="<?= htmlspecialchars($user_data['email']) ?>">
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="example-text-input" class="form-control-label">Nombre</label>
-                    <input class="form-control" type="text" value="<?= htmlspecialchars($user_data['nombre']) ?>">
+                    <input class="form-control" type="text"
+                      value="<?= htmlspecialchars($user_data['nombre']) ?>">
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="example-text-input" class="form-control-label">Apellido</label>
-                    <input class="form-control" type="text" value="<?= htmlspecialchars($user_data['apellido']) ?>">
+                    <input class="form-control" type="text"
+                      value="<?= htmlspecialchars($user_data['apellido']) ?>">
                   </div>
                 </div>
               </div>
@@ -242,25 +269,29 @@ if ($result->num_rows > 0) {
                 <div class="col-md-12">
                   <div class="form-group">
                     <label for="example-text-input" class="form-control-label">Dirección</label>
-                    <input class="form-control" type="text" value="<?= htmlspecialchars($user_data['direccion']) ?>">
+                    <input class="form-control" type="text"
+                      value="<?= htmlspecialchars($user_data['direccion']) ?>">
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="example-text-input" class="form-control-label">Ciudad</label>
-                    <input class="form-control" type="text" value="<?= htmlspecialchars($user_data['ciudad']) ?>">
+                    <input class="form-control" type="text"
+                      value="<?= htmlspecialchars($user_data['ciudad']) ?>">
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="example-text-input" class="form-control-label">País</label>
-                    <input class="form-control" type="text" value="<?= htmlspecialchars($user_data['pais']) ?>">
+                    <input class="form-control" type="text"
+                      value="<?= htmlspecialchars($user_data['pais']) ?>">
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="example-text-input" class="form-control-label">Código postal</label>
-                    <input class="form-control" type="text" value="<?= htmlspecialchars($user_data['codigo_postal']) ?>">
+                    <input class="form-control" type="text"
+                      value="<?= htmlspecialchars($user_data['codigo_postal']) ?>">
                   </div>
                 </div>
               </div>
@@ -270,7 +301,8 @@ if ($result->num_rows > 0) {
                 <div class="col-md-12">
                   <div class="form-group">
                     <label for="example-text-input" class="form-control-label">Acerca de mí</label>
-                    <textarea class="form-control"><?= htmlspecialchars($user_data['acerca_de']) ?></textarea>
+                    <textarea
+                      class="form-control"><?= htmlspecialchars($user_data['acerca_de']) ?></textarea>
                   </div>
                 </div>
               </div>
