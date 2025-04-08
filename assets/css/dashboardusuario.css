@@ -1,0 +1,63 @@
+/* Estilo general */
+body {
+    background-color: #ffffff; /* Fondo blanco */
+    color: #212529; /* Texto oscuro */
+    font-family: Arial, sans-serif;
+}
+
+/* Estilo del navbar */
+.navbar {
+    background-color: #ffffff !important; /* Fondo blanco */
+    color: #212529; /* Texto oscuro */
+}
+
+/* Tarjetas de alojamientos */
+.alojamiento-card {
+    background-color: #f3e5f5; /* Morado lavanda */
+    color: #212529;
+    border: none;
+    border-radius: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.alojamiento-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Botones */
+.btn-primary {
+    background-color: #6a0dad; /* Morado fuerte */
+    border-color: #6a0dad;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #7b1fa2; /* Morado más claro */
+    border-color: #7b1fa2;
+}
+
+.btn-danger {
+    background-color: #d32f2f; /* Rojo */
+    border-color: #d32f2f;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #b71c1c; /* Rojo más oscuro */
+    border-color: #b71c1c;
+}
+
+/* Títulos */
+h2 {
+    color: #6a0dad; /* Morado fuerte */
+    padding: 10px 0;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Bordes y sombras */
+.card {
+    border: 1px solid #e0e0e0; /* Borde claro */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}

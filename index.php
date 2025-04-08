@@ -157,7 +157,7 @@ $result = $conn->query($sql);
         </div>
        </section>
 
-</body>
+    </body>
 </html>
 
 

@@ -1,5 +1,4 @@
 <?php
-session_start();
 include('../includes/header.php');
 include('../db/database.php');
 
@@ -11,11 +10,12 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 
 // Consulta para obtener todos los alojamientos disponibles
-$sql = "SELECT * FROM alojamientos";
+$sql = "SELECT id, nombre, descripcion, imagen FROM alojamientos";
 $result = $conn->query($sql);
 
-// Consulta para obtener los alojamientos que ha seleccionado el usuario
-$misAlojamientos = "SELECT a.* FROM usuario_alojamientos ua
+// Consulta para obtener los alojamientos reservados por el usuario
+$misAlojamientos = "SELECT a.id, a.nombre, a.descripcion, a.imagen 
+                    FROM usuario_alojamientos ua
                     JOIN alojamientos a ON ua.alojamiento_id = a.id
                     WHERE ua.usuario_id = ?";
 $stmt = $conn->prepare($misAlojamientos);
@@ -29,27 +29,44 @@ $mis_result = $stmt->get_result();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../assets/styles.css">
+    <link rel="stylesheet" href="../assets/css/dashboardusuario.css">
     <title>Dashboard Usuario</title>
 </head>
 <body>
 
-<h2>Alojamientos Disponibles</h2>
-<?php while ($row = $result->fetch_assoc()) { ?>
-    <div>
-        <h3><?= htmlspecialchars($row['nombre']) ?></h3>
-        <p><?= htmlspecialchars($row['descripcion']) ?></p>
-        <a href="agregar_alojamiento.php?id=<?= $row['id'] ?>">Seleccionar</a>
+<div class="container mt-5">
+    <h2 class="text-center">Alojamientos Disponibles</h2>
+    <div class="row">
+        <?php while ($row = $result->fetch_assoc()) { ?>
+            <div class="col-md-4">
+                <div class="card alojamiento-card mb-4">
+                    <img src="../assets/img/<?= htmlspecialchars($row['imagen']) ?>" class="card-img-top" alt="<?= htmlspecialchars($row['nombre']) ?>">
+                    <div class="card-body">
+                        <h5 class="card-title"><?= htmlspecialchars($row['nombre']) ?></h5>
+                        <p class="card-text"><?= htmlspecialchars($row['descripcion']) ?></p>
+                        <a href="agregar_alojamiento.php?id=<?= $row['id'] ?>" class="btn btn-primary">Reservar</a>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
     </div>
-<?php } ?>
 
-<h2>Mis Alojamientos</h2>
-<?php while ($row = $mis_result->fetch_assoc()) { ?>
-    <div>
-        <h3><?= htmlspecialchars($row['nombre']) ?></h3>
-        <a href="eliminar_alojamiento.php?id=<?= $row['id'] ?>">Eliminar</a>
+    <h2 class="text-center mt-5">Mis Alojamientos</h2>
+    <div class="row">
+        <?php while ($row = $mis_result->fetch_assoc()) { ?>
+            <div class="col-md-4">
+                <div class="card alojamiento-card mb-4">
+                    <img src="../assets/img/<?= htmlspecialchars($row['imagen']) ?>" class="card-img-top" alt="<?= htmlspecialchars($row['nombre']) ?>">
+                    <div class="card-body">
+                        <h5 class="card-title"><?= htmlspecialchars($row['nombre']) ?></h5>
+                        <p class="card-text"><?= htmlspecialchars($row['descripcion']) ?></p>
+                        <a href="eliminar_alojamiento.php?id=<?= $row['id'] ?>" class="btn btn-danger">Eliminar</a>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
     </div>
-<?php } ?>
+</div>
 
 </body>
 </html>
