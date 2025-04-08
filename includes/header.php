@@ -21,24 +21,31 @@
       <ul class="navbar-nav ms-auto">
         
         <?php if (isset($_SESSION['user_id'])): ?>
-          <!-- Si el usuario está logueado, solo mostramos "Mis Alojamientos" -->
-          <li class="nav-item">
-            <a class="nav-link" href="../pages/dashboard.php">Mis Alojamientos</a>
-          </li>
+            <?php if (isset($_SESSION['tipo']) && $_SESSION['tipo'] === 'admin'): ?>
+                <!-- Si es administrador -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/Alojamientos_CRUD/pages/dashboard.php">Panel Admin</a>
+                </li>
+            <?php else: ?>
+                <!-- Si es usuario normal -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/Alojamientos_CRUD/UsuarioCRUD/dashboard.php">Mis Alojamientos</a>
+                </li>
+            <?php endif; ?>
         <?php else: ?>
-          <!-- Si NO está logueado, mostramos el menú normal -->
-          <li class="nav-item">
-            <a class="nav-link" href="#hero">Inicio</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#about">Nosotros</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#alojamientos">Alojamientos</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#contact">Contactos</a>
-          </li>
+            <!-- Si NO está logueado, mostramos el menú normal -->
+            <li class="nav-item">
+                <a class="nav-link" href="/Alojamientos_CRUD/index.php#hero">Inicio</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Alojamientos_CRUD/index.php#about">Nosotros</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Alojamientos_CRUD/index.php#alojamientos">Alojamientos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Alojamientos_CRUD/index.php#contact">Contactos</a>
+            </li>
         <?php endif; ?>
 
       </ul>

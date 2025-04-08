@@ -8,8 +8,8 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 if (isset($_GET['id'])) {
-    $alojamiento_id = $_GET['id'];
-    $user_id = $_SESSION['user_id'];
+    $alojamiento_id = intval($_GET['id']);
+    $user_id = intval($_SESSION['user_id']);
 
     $sql = "DELETE FROM usuario_alojamientos WHERE usuario_id = ? AND alojamiento_id = ?";
     $stmt = $conn->prepare($sql);
