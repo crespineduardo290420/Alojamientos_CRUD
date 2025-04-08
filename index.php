@@ -27,7 +27,7 @@ $result = $conn->query($sql);
                     <h1 class="text-uppercase text-white fw-semibold display-1">Bienvenido Kodigo Hotel</h1>
                     <h5 class="text-white mt-3 mb-4">Dando el Mejor Espacio para Descansar</h5>
                     <div>
-                    <a href="login.php" class="btn btn-brand">Iniciar Sesion</a>
+                    
                     </div>
                 </div>
             </div>
