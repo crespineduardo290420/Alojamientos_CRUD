@@ -1,80 +1,58 @@
 <?php
 session_start();
-include '../db/database.php'; // Archivo para la conexión con MySQL
+include '../db/database.php';
 
-// Verificar si el usuario está autenticado
-if (!isset($_SESSION['user_id'])) {
-    header("Location: ../login.php");
-    exit();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Verificar conexión
+if ($conn->connect_error) {
+  die("Error en la conexión: " . $conn->connect_error);
 }
 
-// Verificar si el usuario es administrador
-if ($_SESSION['role'] !== 'admin') {
-    echo "Acceso denegado: Solo los administradores pueden agregar alojamientos.";
-    exit();
-}
+// Indicador de éxito
+$success = false;
 
-// Manejar la solicitud de agregar un alojamiento
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nombreLugar = $_POST['nombreLugar'];
-    $ubicacionLugar = $_POST['ubicacionLugar'];
-    $horariosDisponibles = $_POST['horariosDisponibles'];
-    $huespedes = $_POST['huespedes'];
-    $precioPorDia = $_POST['precioPorDia'];
-    $imagen = $_FILES['imagen'];
+  $nombreLugar = $_POST['nombreLugar'];
+  $ubicacionLugar = $_POST['ubicacionLugar'];
+  $horariosDisponibles = $_POST['horariosDisponibles'];
+  $huespedes = $_POST['huespedes'];
+  $precioPorDia = $_POST['precioPorDia'];
+  $imagen = $_FILES['imagen'];
 
-    // Validar que los datos no estén vacíos
-    if (!empty($nombreLugar) && !empty($ubicacionLugar) && !empty($horariosDisponibles) && !empty($huespedes) && !empty($precioPorDia) && !empty($imagen['name'])) {
-        // Manejar la subida de la imagen
-        $target_dir = "../uploads/";
-        $target_file = $target_dir . basename($imagen["name"]);
-        $uploadOk = 1;
-        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+  // Validar que todos los datos estén llenos
+  if (!empty($nombreLugar) && !empty($ubicacionLugar) && !empty($horariosDisponibles) && !empty($huespedes) && !empty($precioPorDia) && !empty($imagen['name'])) {
+    // Subir imagen
+    $target_dir = "../uploads/";
+    $target_file = $target_dir . basename($imagen["name"]);
+    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-        // Verificar si el archivo es una imagen real
-        $check = getimagesize($imagen["tmp_name"]);
-        if ($check !== false) {
-            $uploadOk = 1;
+    $check = getimagesize($imagen["tmp_name"]);
+    if ($check !== false && $imagen["size"] <= 2000000 && in_array($imageFileType, ["jpg", "png", "jpeg", "gif"])) {
+      if (move_uploaded_file($imagen["tmp_name"], $target_file)) {
+        // Insertar datos
+        $sql = "INSERT INTO alojamiento (nombre, direccion, horarios, huespedes, precio, imagen) VALUES (?, ?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sssiis", $nombreLugar, $ubicacionLugar, $horariosDisponibles, $huespedes, $precioPorDia, $target_file);
+
+        if ($stmt->execute()) {
+          $success = true; // Registro exitoso
         } else {
-            echo "El archivo no es una imagen.";
-            $uploadOk = 0;
+          echo "Error en la consulta: " . $stmt->error . "<br>";
         }
-
-        // Verificar tamaños y extensiones permitidas
-        if ($imagen["size"] > 500000) { // Tamaño máximo de 500KB
-            echo "El archivo es demasiado grande.";
-            $uploadOk = 0;
-        }
-        if (!in_array($imageFileType, ["jpg", "png", "jpeg", "gif"])) {
-            echo "Solo se permiten archivos JPG, JPEG, PNG y GIF.";
-            $uploadOk = 0;
-        }
-
-        // Subir imagen si todo está bien
-        if ($uploadOk == 1) {
-            if (move_uploaded_file($imagen["tmp_name"], $target_file)) {
-                // Insertar datos en la base de datos
-                $sql = "INSERT INTO alojamientos (nombre, direccion, horarios, huespedes, precio, imagen) VALUES (?, ?, ?, ?, ?, ?)";
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("sssiis", $nombreLugar, $ubicacionLugar, $horariosDisponibles, $huespedes, $precioPorDia, $target_file);
-
-                if ($stmt->execute()) {
-                    echo "Alojamiento agregado exitosamente.";
-                    // Redirigir después de agregar
-                    header("Location: alojamientos.php");
-                    exit();
-                } else {
-                    echo "Error al agregar alojamiento: " . $stmt->error;
-                }
-            } else {
-                echo "Error al subir la imagen.";
-            }
-        }
+      } else {
+        echo "Error al subir la imagen.<br>";
+      }
     } else {
-        echo "Por favor, complete todos los campos.";
+      echo "El archivo no cumple con los requisitos.<br>";
     }
+  } else {
+    echo "Por favor, complete todos los campos.<br>";
+  }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -82,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.4/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="icon" type="image/png" href="../assets/img/favicon.png">
   <title>
     Hotel Kodigo
@@ -164,9 +143,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="../pages/cerrar-sesion.php">
-            <div
-              class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+          <a class="nav-link" href="../pages/logout.php">
+            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-button-power text-dark text-sm opacity-10"></i>
             </div>
             <span class="nav-link-text ms-1">Cerrar Sesión</span>
@@ -183,7 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <div class="container-fluid py-1 px-3">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-white" href="javascript:;">Pages</a></li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-white" href="javascript:;">Dashboard</a></li>
             <li class="breadcrumb-item text-sm text-white active" aria-current="page">Alojamiento</li>
           </ol>
           <h6 class="font-weight-bolder text-white mb-0">Alojamiento</h6>
@@ -222,85 +200,106 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </nav>
     <!-- End Navbar -->
     <div class="container-fluid py-4">
-      <div class="row">
-        <div class="col-md-12 mt-4"> <!-- Contenedor principal -->
-          <div class="card">
-            <div class="card-header pb-0 px-3">
-              <h6 class="mb-0">Agregar Alojamiento</h6>
-            </div>
-            <div class="card-body pt-4 p-3">
-              <form action="/add_accommodation" method="POST" enctype="multipart/form-data"> <!-- Formulario -->
-                <div class="mb-3">
-                  <label for="nombreLugar" class="form-label">Nombre del Lugar</label>
-                  <input type="text" class="form-control" id="nombreLugar" name="nombreLugar"
-                    placeholder="Ingrese el nombre del lugar" required>
-                </div>
-                <div class="mb-3">
-                  <label for="ubicacionLugar" class="form-label">Ubicación del Lugar</label>
-                  <input type="text" class="form-control" id="ubicacionLugar" name="ubicacionLugar"
-                    placeholder="Ingrese la ubicación" required>
-                </div>
-                <div class="mb-3">
-                  <label for="horariosDisponibles" class="form-label">Horarios Disponibles</label>
-                  <input type="text" class="form-control" id="horariosDisponibles" name="horariosDisponibles"
-                    placeholder="Ejemplo: 9 AM - 5 PM" required>
-                </div>
-                <div class="mb-3">
-                  <label for="huespedes" class="form-label">Huéspedes</label>
-                  <input type="number" class="form-control" id="huespedes" name="huespedes"
-                    placeholder="Número máximo de huéspedes" required>
-                </div>
-                <div class="mb-3">
-                  <label for="precioPorDia" class="form-label">Precio por día</label>
-                  <input type="number" step="0.01" class="form-control" id="precioPorDia" name="precioPorDia"
-                    placeholder="Ingrese el precio por día" required>
-                </div>
-                <div class="mb-3">
-                  <label for="imagen" class="form-label">Imagen</label>
-                  <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*" required>
-                </div>
-                <button type="submit" class="btn btn-success">Guardar Alojamiento</button>
-              </form>
+      <div class="container-fluid py-4">
+        <!-- Alerta de confirmación -->
+        <?php if ($success): ?>
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            ¡El alojamiento fue registrado exitosamente!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        <?php endif; ?>
+
+        <!-- Contenedor de la tarjeta -->
+        <div class="row">
+          <div class="col-md-12 mt-4"> <!-- Contenedor principal -->
+            <div class="card">
+              <div class="card-header pb-0 px-3">
+                <h6 class="mb-0">Agregar Alojamiento</h6>
+              </div>
+              <div class="card-body pt-4 p-3">
+                <form action="../pages/alojamiento.php" method="POST" enctype="multipart/form-data"><!-- Formulario -->
+                  <div class="mb-3">
+                    <label for="nombreLugar" class="form-label">Nombre del Lugar</label>
+                    <input type="text" class="form-control" id="nombreLugar" name="nombreLugar"
+                      placeholder="Ingrese el nombre del lugar" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="ubicacionLugar" class="form-label">Ubicación del Lugar</label>
+                    <input type="text" class="form-control" id="ubicacionLugar" name="ubicacionLugar"
+                      placeholder="Ingrese la ubicación" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="horariosDisponibles" class="form-label">Horarios Disponibles</label>
+                    <input type="text" class="form-control" id="horariosDisponibles" name="horariosDisponibles"
+                      placeholder="Ejemplo: 9 AM - 5 PM" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="huespedes" class="form-label">Huéspedes</label>
+                    <input type="number" class="form-control" id="huespedes" name="huespedes"
+                      placeholder="Número máximo de huéspedes" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="precioPorDia" class="form-label">Precio por día</label>
+                    <input type="number" step="0.01" class="form-control" id="precioPorDia" name="precioPorDia"
+                      placeholder="Ingrese el precio por día" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="imagen" class="form-label">Imagen</label>
+                    <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*" required>
+                  </div>
+                  <button type="submit" class="btn btn-success">Guardar Alojamiento</button>
+                </form>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <footer class="footer pt-3  ">
-      <div class="container-fluid">
-        <div class="row align-items-center justify-content-lg-between">
-          <div class="col-lg-6 mb-lg-0 mb-4">
-            <div class="copyright text-center text-sm text-muted text-lg-start">
-              ©
-              <script>
-                document.write(new Date().getFullYear())
-              </script>,
-              made with <i class="fa fa-heart"></i> by
-              <!-- conectar con pagina de inicio -->
-              <a href="" class="font-weight-bold" target="_blank">Kodigo's students</a>
+      <footer class="footer pt-3  ">
+        <div class="container-fluid">
+          <div class="row align-items-center justify-content-lg-between">
+            <div class="col-lg-6 mb-lg-0 mb-4">
+              <div class="copyright text-center text-sm text-muted text-lg-start">
+                ©
+                <script>
+                  document.write(new Date().getFullYear())
+                </script>,
+                made with <i class="fa fa-heart"></i> by
+                <!-- conectar con pagina de inicio -->
+                <a href="" class="font-weight-bold" target="_blank">Kodigo's students</a>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <ul class="nav nav-footer justify-content-center justify-content-lg-end">
+                <li class="nav-item">
+                  <!-- agregar conexiones -->
+                  <a href="" class="nav-link text-muted" target="_blank">About Us</a>
+                </li>
+                <li class="nav-item">
+                  <a href="" class="nav-link text-muted" target="_blank">GitHub</a>
+                </li>
+              </ul>
             </div>
           </div>
-          <div class="col-lg-6">
-            <ul class="nav nav-footer justify-content-center justify-content-lg-end">
-              <li class="nav-item">
-                <!-- agregar conexiones -->
-                <a href="" class="nav-link text-muted" target="_blank">About Us</a>
-              </li>
-              <li class="nav-item">
-                <a href="" class="nav-link text-muted" target="_blank">GitHub</a>
-              </li>
-            </ul>
-          </div>
         </div>
-      </div>
-    </footer>
+      </footer>
     </div>
   </main>
   <!--   Core JS Files   -->
   <script src="../assets/js/core/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.4/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../assets/js/core/bootstrap.min.js"></script>
   <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
   <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
+  <script>
+    // Cerrar automáticamente las alertas después de 5 segundos
+    setTimeout(() => {
+      const alert = document.querySelector('.alert');
+      if (alert) {
+        alert.classList.add('fade'); // Agrega la clase 'fade' para animación
+        setTimeout(() => alert.remove(), 500); // Opcionalmente, elimina del DOM
+      }
+    }, 5000); // Cambia el tiempo (en milisegundos) según prefieras
+  </script>
   <script>
     var win = navigator.platform.indexOf('Win') > -1;
     if (win && document.querySelector('#sidenav-scrollbar')) {

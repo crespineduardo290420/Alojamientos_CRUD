@@ -1,11 +1,14 @@
 <?php
+// Cargar configuración (cambiar segun la localizacion)
+require __DIR__ . '/../config/config.php';
+
 session_start();
 include '../db/database.php'; // Archivo para la conexión con la base de datos
 
 // Verificar si el usuario está autenticado
 if (!isset($_SESSION['user_id'])) {
-    header("Location: ../login.php");
-    exit();
+  header("Location: ../login.php");
+  exit();
 }
 ?>
 
@@ -33,7 +36,7 @@ if (!isset($_SESSION['user_id'])) {
 
 <body class="g-sidenav-show   bg-gray-100">
   <div class="min-height-300 bg-dark position-absolute w-100"></div>
-  
+
   <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 " id="sidenav-main">
     <div class="sidenav-header">
       <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
@@ -90,7 +93,7 @@ if (!isset($_SESSION['user_id'])) {
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="../pages/cerrar-sesion.php">
+          <a class="nav-link" href="../pages/logout.php">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-button-power text-dark text-sm opacity-10"></i>
             </div>
@@ -107,7 +110,7 @@ if (!isset($_SESSION['user_id'])) {
       <div class="container-fluid py-1 px-3">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-white" href="javascript:;">Pages</a></li>
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-white" href="javascript:;">Dashboard</a></li>
             <li class="breadcrumb-item text-sm text-white active" aria-current="page">Facturación</li>
           </ol>
           <h6 class="font-weight-bolder text-white mb-0">Facturación</h6>
@@ -182,33 +185,33 @@ if (!isset($_SESSION['user_id'])) {
         </div>
       </div>
     </div>
-      <footer class="footer pt-3  ">
-        <div class="container-fluid">
-          <div class="row align-items-center justify-content-lg-between">
-            <div class="col-lg-6 mb-lg-0 mb-4">
-              <div class="copyright text-center text-sm text-muted text-lg-start">
-                © <script>
-                  document.write(new Date().getFullYear())
-                </script>,
-                made with <i class="fa fa-heart"></i> by
-                <!-- conectar con pagina de inicio -->
-                <a href="" class="font-weight-bold" target="_blank">Kodigo's students</a>
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <ul class="nav nav-footer justify-content-center justify-content-lg-end">
-                <li class="nav-item">
-                  <!-- agregar conexiones -->
-                  <a href="" class="nav-link text-muted" target="_blank">About Us</a>
-                </li>
-                <li class="nav-item">
-                  <a href="" class="nav-link text-muted" target="_blank">GitHub</a>
-                </li>
-              </ul>
+    <footer class="footer pt-3  ">
+      <div class="container-fluid">
+        <div class="row align-items-center justify-content-lg-between">
+          <div class="col-lg-6 mb-lg-0 mb-4">
+            <div class="copyright text-center text-sm text-muted text-lg-start">
+              © <script>
+                document.write(new Date().getFullYear())
+              </script>,
+              made with <i class="fa fa-heart"></i> by
+              <!-- conectar con pagina de inicio -->
+              <a href="" class="font-weight-bold" target="_blank">Kodigo's students</a>
             </div>
           </div>
+          <div class="col-lg-6">
+            <ul class="nav nav-footer justify-content-center justify-content-lg-end">
+              <li class="nav-item">
+                <!-- agregar conexiones -->
+                <a href="" class="nav-link text-muted" target="_blank">About Us</a>
+              </li>
+              <li class="nav-item">
+                <a href="" class="nav-link text-muted" target="_blank">GitHub</a>
+              </li>
+            </ul>
+          </div>
         </div>
-      </footer>
+      </div>
+    </footer>
     </div>
   </main>
   <!--   Core JS Files   -->
