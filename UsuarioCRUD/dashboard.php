@@ -40,7 +40,7 @@ $mis_result = $stmt->get_result();
         <?php while ($row = $result->fetch_assoc()) { ?>
             <div class="col-md-4">
                 <div class="card alojamiento-card mb-4">
-                    <img src="../uploads<?= htmlspecialchars($row['imagen']) ?>" class="card-img-top" alt="<?= htmlspecialchars($row['nombre']) ?>">
+                    <img src="<?= htmlspecialchars($row['imagen']) ?>" class="card-img-top" alt="<?= htmlspecialchars($row['nombre']) ?>">
                     <div class="card-body">
                         <h5 class="card-title"><?= htmlspecialchars($row['nombre']) ?></h5>
                         <p class="card-text"><?= htmlspecialchars($row['descripcion']) ?></p>
@@ -56,7 +56,7 @@ $mis_result = $stmt->get_result();
         <?php while ($row = $mis_result->fetch_assoc()) { ?>
             <div class="col-md-4">
                 <div class="card alojamiento-card mb-4">
-                    <img src="../uploads<?= htmlspecialchars($row['imagen']) ?>" class="card-img-top" alt="<?= htmlspecialchars($row['nombre']) ?>">
+                    <img src="<?= htmlspecialchars($row['imagen']) ?>" class="card-img-top" alt="<?= htmlspecialchars($row['nombre']) ?>">
                     <div class="card-body">
                         <h5 class="card-title"><?= htmlspecialchars($row['nombre']) ?></h5>
                         <p class="card-text"><?= htmlspecialchars($row['descripcion']) ?></p>
